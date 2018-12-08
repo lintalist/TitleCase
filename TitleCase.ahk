@@ -5,39 +5,15 @@ Purpose    : Title case (capital case, headline style), example
              "The Quick Brown Fox Jumps over the Lazy Dog"
              A mixed-case style with all words capitalised, except for certain subsets
              -- https://en.wikipedia.org/wiki/Letter_case#Title_case
-Version    : 1.0
+Version    : 1.1
 Source     : https://github.com/lintalist/TitleCase
 License    : See license.txt for further details (GPL-2.0)
 
 History:
+v1.1 - adding readme.md doc, minor mods to default LowerCaseList
 v1.0 - initial version
 
-Documentation:
-
-Options:
-
-- Text    sentence to convert to TitleCase
-- lang    language to use (reads from ini), default "en" for English
-- ini     ini file to use, default "TitleCase.ini". 
-          If there is no INI present in A_ScriptDir it will create a default one ("en" only)
-
-The text is transformed first to AutoHotkey Title case format. 
-
-After that several functions are called to process exceptions in the order as outlined below in the INI setup.
-
-Ini setup - all keys are CSV lists:
-
-[lang]
-LowerCaseList=         words you would prefer to have lowercase: a,and,is,the,etc [1]
-UpperCaseList=         words you would prefer to have uppercase: AHK,IBM,UK
-MixedCaseList=         words you would prefer to have MixedCase: AutoHotkey,iPhone
-ExceptionsList=        [2]
-AlwaysLowerCaseList=   final check to ensure that any of the actions above haven't transformed specific words
-
-[1] Also does RegExReplace(Text, "im)([’'`])s","$1s") ; to prevent grocer'S
-[2] Also does RegExReplace(Text, "im)[\.:;] \K([a-z])","$U{1}") ; first letter after .:; uppercase
-
-The ini file can have multiple [sections] for speficic languages - you can also use multiple INI files
+Documentation see readme.md @ https://github.com/lintalist/TitleCase
 
 */
 
@@ -93,14 +69,14 @@ TitleCase_ExceptionsList(Text,list)
 	 loop, parse, list, CSV
 		Text:=RegExReplace(Text, "im)\b" A_LoopField "\b",A_LoopField)
 	 Text:=RegExReplace(Text, "im)[\.:;] \K([a-z])","$U{1}") ; first letter after .:; uppercase
-	 Return text
+	 Return Text
 	}
 	
 TitleCase_AlwaysLowerCaseList(Text,list)
 	{
 	 loop, parse, list, CSV
 		Text:=RegExReplace(Text, "im)\b" A_LoopField "\b",A_LoopField)
-	 Return text
+	 Return Text
 	}
 
 ; create ini if not present, that way we don't overwrite any user changes in future updates
@@ -113,7 +89,7 @@ FileAppend,
 ; ------------------------------------------------------------------------------------------
 
 [en]
-LowerCaseList=a,an,and,amid,as,at,atop,be,but,by,for,from,in,into,is,it,its,nor,not,of,off,on,onto,or,out,over,past,per,plus,than,the,till,to,up,upon,v,via,with
+LowerCaseList=a,an,and,amid,as,at,atop,be,but,by,for,from,if,in,into,is,it,its,nor,not,of,off,on,onto,or,out,over,past,per,plus,than,the,till,to,up,upon,v,vs,via,with
 UpperCaseList=AHK,IBM,UK,USA
 MixedCaseList=AutoHotkey,iPod,iPad,iPhone
 ExceptionsList=
