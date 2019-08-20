@@ -52,6 +52,8 @@ The ini-file can have multiple [Sections] for specific languages or situations. 
 
 Note: If you prepare your own ini files be sure to use UTF-16 encoded files to ensure proper processing of Unicode / extended ASCII characters. See the AutoHotkey [IniRead](https://autohotkey.com/docs/commands/IniRead.htm) documentation.
 
+v1.2+ Added RegExReplace() to address 1st 2nd 3rd 4th etc `1ST, 22ND` -> `1st, 22nd`
+
 ## Examples:
 
 (with default TitleCase.ini and English)
