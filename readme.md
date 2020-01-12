@@ -34,25 +34,68 @@ So "GONE with the WIND" would become "Gone With The Wind"
 
 After that several (find and replace) functions are called to process exceptions in the order as outlined below in the INI setup.
 
-Ini setup - All keys are CSV lists:
+Ini setup - All keys are CSV lists apart from the find and replace pairs defined by _find _replace:
 
 ```ini
 [lang]
-LowerCaseList=         words you would prefer to have lowercase: a,and,is,the,etc [1]
-UpperCaseList=         words you would prefer to have uppercase: AHK,IBM,UK
-MixedCaseList=         words you would prefer to have MixedCase: AutoHotkey,iPhone
-ExceptionsList=        [2]
-AlwaysLowerCaseList=   final check to ensure that any of the actions above haven't transformed specific words
+LowerCaseList=            words you would prefer to have lowercase: a,and,is,the,etc [1]
+UpperCaseList=            words you would prefer to have uppercase: AHK,IBM,UK
+MixedCaseList=            words you would prefer to have MixedCase: AutoHotkey,iPhone
+ExceptionsList=           [2]
+AlwaysLowerCaseList=      final check to ensure that any of the actions above haven't transformed specific words
+OrdinalIndicator_Find=    Regular Expression to FIND
+OrdinalIndicator_Replace= Regular Expression to REPLACE (see ordinal below)
+Hypen1_Find=
+Hypen1_Replace=
+Hypen2_Find=
+Hypen2_Replace=
+
 ```
 
 [1] Also does: ```RegExReplace(Text, "im)([’'`])s","$1s")``` ; to prevent grocer'S   
 [2] Also does: ```RegExReplace(Text, "im)[\.:;] \K([a-z])","$U{1}")``` ; first letter after .:; uppercase
 
+## Pairs
+
+Apart from the CSV lists you can also define find and replace pairs in the INI to handle special use cases such as Ordinal numbers.
+
+You can define a pair by using the same keyword and append "_find" and "_replace", example:
+
+```ini
+Hypen1_Find   =im)-\K(.)
+Hypen1_Replace=$U{1}
+```
+
+These pairs are regular expessions and are used as follows:
+
+    Text:=RegExReplace(Text,pair_find,pair_replace)
+
+### Ordinal Numbers
+
+"Ordinal numbers may be written in English with numerals and letter suffixes: 1st, 2nd or 2d, 3rd or 3d, 4th, 11th, 21st, 101st, 477th, etc., with the suffix acting as an ordinal indicator."  
+-- https://en.wikipedia.org/wiki/Ordinal_numeral
+
+English is included by default, a possible example for French is provided below.
+
+#### English
+
+```ini
+OrdinalIndicator_Find   =im)\b(\d+)(st|nd|rd|th)\b
+OrdinalIndicator_Replace=$1$L{2}
+```
+
+#### French
+
+```ini
+OrdinalIndicator_Find   =im)\b(\d+)(er|re|e)\b
+OrdinalIndicator_Replace=$1$L{2}
+```
+
+## Languages
+
 The ini-file can have multiple [Sections] for specific languages or situations. Or you can prepare a different INI file for each situation.
 
 Note: If you prepare your own ini files be sure to use UTF-16 encoded files to ensure proper processing of Unicode / extended ASCII characters. See the AutoHotkey [IniRead](https://autohotkey.com/docs/commands/IniRead.htm) documentation.
-
-v1.2+ Added RegExReplace() to address 1st 2nd 3rd 4th etc `1ST, 22ND` -> `1st, 22nd`
 
 ## Examples:
 
@@ -75,5 +118,8 @@ Out: Helpful Script Writing Tricks and Howto's
 
 In : Discuss features, issues, about Editors for AHK  
 Out: Discuss Features, Issues, About Editors for AHK
+
+In : AUTOHOTKEY IS THE 1ST SCRIPTING LANGUAGE WITH HOTKEYS and has User-contributed features  
+Out: AutoHotkey is the 1st Scripting Language with Hotkeys and Has User-Contributed Features
 
 Copyright Lintalist. See license.txt
