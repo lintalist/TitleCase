@@ -5,11 +5,12 @@ Purpose    : Title case (capital case, headline style), example
              "The Quick Brown Fox Jumps over the Lazy Dog"
              A mixed-case style with all words capitalised, except for certain subsets
              -- https://en.wikipedia.org/wiki/Letter_case#Title_case
-Version    : 1.3
+Version    : 1.4
 Source     : https://github.com/lintalist/TitleCase
 License    : See license.txt for further details (GPL-2.0)
 
 History:
+v1.4 - replaced pairs object by simple list (ensures order of processing as listed in INI)
 v1.3 - additional Find/Replace via INI setup - moved v1.2 to INI  
        read language section in one go
 v1.2 - adding RegExReplace() to address 1st 2nd 3rd 4th etc
@@ -22,7 +23,7 @@ Documentation see readme.md @ https://github.com/lintalist/TitleCase
 
 TitleCase(Text,lang="en",ini="TitleCase.ini")
 	{
-	 static settings:={}, pairs:={}
+	 static settings:={}, pairs
 	 If !InStr(ini,"\")
 		ini:=A_ScriptDir "\" ini
 	 IfNotExist, %ini%
@@ -35,8 +36,8 @@ TitleCase(Text,lang="en",ini="TitleCase.ini")
 		 if InStr(data[1],"_")
 			{
 			 pairdata:=StrSplit(A_LoopField,"_").1
-			 If !pairs[pairdata]
-				pairs.insert(pairdata,1)
+			 If pairdata not in pairs
+				pairs.= pairdata ","
 			}
 		}
 	 StringLower, Text, Text, T
@@ -44,10 +45,11 @@ TitleCase(Text,lang="en",ini="TitleCase.ini")
 	 Text:=TitleCase_UpperCaseList(Text,settings.UpperCaseList)
 	 Text:=TitleCase_MixedCaseList(Text,settings.MixedCaseList)
 	 Text:=TitleCase_ExceptionsList(Text,settings.ExceptionsList)
-	 for k, v in pairs
+	 pairs:=trim(pairs,",")
+	 loop, parse, pairs, CSV
 		{
-		 find:=settings[k "_find"]
-		 replace:=settings[k "_replace"]
+		 find:=settings[A_LoopField "_find"]
+		 replace:=settings[A_LoopField "_replace"]
 		 Text:=RegExReplace(Text,find,replace)
 		}
 	 Text:=TitleCase_AlwaysLowerCaseList(Text,settings.AlwaysLowerCaseList)

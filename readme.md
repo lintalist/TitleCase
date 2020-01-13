@@ -80,14 +80,14 @@ English is included by default, a possible example for French is provided below.
 #### English
 
 ```ini
-OrdinalIndicator_Find   =im)\b(\d+)(st|nd|rd|th)\b
+OrdinalIndicator_Find=im)\b(\d+)(st|nd|rd|th)\b
 OrdinalIndicator_Replace=$1$L{2}
 ```
 
 #### French
 
 ```ini
-OrdinalIndicator_Find   =im)\b(\d+)(er|re|e)\b
+OrdinalIndicator_Find=im)\b(\d+)(er|re|e)\b
 OrdinalIndicator_Replace=$1$L{2}
 ```
 
