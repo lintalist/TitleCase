@@ -5,11 +5,12 @@ Purpose    : Title case (capital case, headline style), example
              "The Quick Brown Fox Jumps over the Lazy Dog"
              A mixed-case style with all words capitalised, except for certain subsets
              -- https://en.wikipedia.org/wiki/Letter_case#Title_case
-Version    : 1.4
+Version    : 1.41
 Source     : https://github.com/lintalist/TitleCase
 License    : See license.txt for further details (GPL-2.0)
 
 History:
+v1.41 - removed static
 v1.4 - replaced pairs object by simple list (ensures order of processing as listed in INI)
 v1.3 - additional Find/Replace via INI setup - moved v1.2 to INI  
        read language section in one go
@@ -23,7 +24,7 @@ Documentation see readme.md @ https://github.com/lintalist/TitleCase
 
 TitleCase(Text,lang="en",ini="TitleCase.ini")
 	{
-	 static settings:={}, pairs
+	 settings:={}, pairs:=""
 	 If !InStr(ini,"\")
 		ini:=A_ScriptDir "\" ini
 	 IfNotExist, %ini%
@@ -37,7 +38,7 @@ TitleCase(Text,lang="en",ini="TitleCase.ini")
 			{
 			 pairdata:=StrSplit(A_LoopField,"_").1
 			 If pairdata not in pairs
-				pairs.= pairdata ","
+				pairs .= pairdata ","
 			}
 		}
 	 StringLower, Text, Text, T
